@@ -11,6 +11,24 @@ function addClickHandlers() {
   // delete book button listener
   $('#bookShelf').on('click','.delete-book',deleteBookHandler)
 }
+//function to handle the click event
+// and pass the book id to the deletebook();
+function deleteBookHandler() {
+  deleteBook($(this).data("id"));
+}
+
+//delete a specific book by id
+function deleteBook(bookId) {
+  $.ajax({
+    method: 'DELETE',
+    url: `/books/${bookId}`
+  }).then(response => {
+    console.log('delete book')
+    refreshBooks();
+  }).catch(err => {
+    alert('There was a problem deleting that book', err);
+  });
+}
 
 function handleSubmit() {
   console.log('Submit button clicked.');
