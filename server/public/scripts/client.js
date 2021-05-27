@@ -10,7 +10,36 @@ function addClickHandlers() {
   // TODO - Add code for edit & delete buttons
   // delete book button listener
   $('#bookShelf').on('click','.delete-book',deleteBookHandler)
+  // update isread button listener
+  $('#bookShelf').on('click','.isRead',toggleIsReadHandler)
+  $('#bookShelf').on('click','.isNotRead',toggleIsNotReadHandler)
 }
+
+ function toggleIsReadHandler() {
+  toggleIsRead($(this).data("id"), true);
+ }
+
+ function toggleIsNotReadHandler() {
+  toggleIsRead($(this).data("id"), false);
+ }
+
+ function toggleIsRead(bookId, boolean) {
+  $.ajax({
+      method: 'PUT',
+      url: `/musicLibrary/${bookId}`,
+      data: {
+          isRead: boolean
+      }
+  })
+  .then(response => {
+      console.log('#');
+      refreshBooks();
+  }).catch(err => {
+      console.log(`No isRead change.`);
+      alert('There was a problem with isReadbutton');
+  })
+}
+
 //function to handle the click event
 // and pass the book id to the deletebook();
 function deleteBookHandler() {
@@ -78,6 +107,9 @@ function renderBooks(books) {
       <tr>
         <td>${book.title}</td>
         <td>${book.author}</td>
+        <td>${book.isRead}</td>
+        <td><button class='isRead' data-id="${book.id}">Is Read</button></td>
+        <td><button class='isNotRead' data-id="${book.id}">Is Not Read</button></td>
         <td><button class='delete-book' data-id="${book.id}">Delete</button></td>
       </tr>
     `);
